@@ -1,6 +1,6 @@
 from pytubefix import YouTube
 from sys import argv, exit
-from moviepy.editor import VideoFileClip, AudioFileClip, ipython_display
+from moviepy.editor import VideoFileClip, AudioFileClip, concatenate_audioclips
 import os
 import os.path
 
@@ -8,6 +8,7 @@ import os.path
 vid_location = input("Are the video(s) in a file or will you insert them here, into the terminal? Answer file or terminal. \n")
 save_location = input("Leave blank if you want to download the file in this directory or enter the desired path: \n") or "./"
 
+#Creating the necessary functions for downloading the videos
 def download_video(link, pathToSave, number):
     """Downloads the video file of the YT link"""
     
@@ -19,7 +20,7 @@ def download_video(link, pathToSave, number):
     message = "Downloading video number " + str(number) + "..."
     print(message)
     ytd.download(pathToSave + "/videos/") 
-    print("Done! \n")
+    print("Done!")
     
 def download_audio(link, pathToSave, number):
     """Downloads the audio file of the YT link"""
@@ -57,14 +58,22 @@ def combining_video_and_audio(audio_path, video_path, path_to_save):
     audio_clip = AudioFileClip(audio_file)
     video_clip = VideoFileClip(video_file)
     
-    final_video = video_clip.set_audio(audio_clip)
-    final_video.ipython_display(width = 480)
+    # Calculate the number of times to loop the audio if needed
+    loops_required = int(video_clip.duration // audio_clip.duration) + 1
+    audio_clips = [audio_clip] * loops_required
+
+    # Make the looped audio
+    looped_audio_clip = concatenate_audioclips(audio_clips)
+
     
-    output_file_name = os.path.basename(video_file).replace('.mp4', '_final.mp4')
+    final_video = video_clip.set_audio(looped_audio_clip.subclip(0, video_clip.duration))
+    print("Audio is set")
+    
+    output_file_name = os.path.basename(video_file).replace('.mp4', ' Final.mp4')
     output_file_path = os.path.join(path_to_save, output_file_name)
-    final_video.write_videofile(output_file_path, codec="libx264", audio_codec="aac")
+    final_video.write_videofile(output_file_path, codec='libx264', audio_codec='aac', temp_audiofile='temp-audio.m4a', remove_temp=True)
     
-    print(f"Combined video and audio file saved as {output_file_path}")
+    print(f"Combined video and audio file saved as {output_file_name}")
     
 
 if vid_location == "terminal":
