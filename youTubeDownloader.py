@@ -74,7 +74,7 @@ def combining_video_and_audio(audio_path, video_path, path_to_save):
     final_video.write_videofile(output_file_path, codec='libx264', audio_codec='aac', temp_audiofile='temp-audio.m4a', remove_temp=True)
     
     print(f"Combined video and audio file saved as {output_file_name}")
-    
+
 
 if vid_location == "terminal":
     for i in range(1, len(argv)):
@@ -85,8 +85,7 @@ if vid_location == "terminal":
         audio_dir = save_location + "audios/"
         video_dir = save_location + "videos/"
         combining_video_and_audio(audio_dir, video_dir, save_location)
-        
-        
+
 elif vid_location == "file":
     file_path = input("Please input the path to the text file that contains the YT links: \n")
     if not os.path.isfile(file_path): 
@@ -97,7 +96,12 @@ elif vid_location == "file":
     
     for line in file:
         download_video(line, save_location, video_number)
+        download_audio(line, save_location, video_number)
         video_number += 1
+        
+        audio_dir = save_location + "audios/"
+        video_dir = save_location + "videos/"
+        combining_video_and_audio(audio_dir, video_dir, save_location)
         
 else:
     print("\nNot a valid input. Please put the YT links in a list or place them in a text file.")
