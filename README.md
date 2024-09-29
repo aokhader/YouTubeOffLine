@@ -10,6 +10,5 @@ To play the final video, play it using a video player for MP4 files e.g. Media P
 
 ## References
 
-This program was originally designed to use the PyTube library, but recently there was a HTTP error that was raised by the internal servers of PyTube. To fix that PyTube recommended us to use PyTubeFix instead. As of right now, the program only downloads the video file without the audio.
-
-To fix the audio issue, I had to get the audio file on its own and combine the video and audio files using MoviePy, a Python library for video editing.
+This program was originally designed to use the PyTube library, but recently there was a HTTP error that was raised by the internal servers of PyTube. To fix that PyTube recommended us to use PyTubeFix instead.
+To fix the issue of no audio being downloaded when getting the video stream, I had to get the audio file on its own and combine the video and audio files using MoviePy, a Python library for video editing.
